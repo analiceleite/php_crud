@@ -9,6 +9,17 @@
     </div>
 <?php endif; ?>
 
+<?php if (!empty($success)): ?>
+    <div class="fixed top-4 right-4 bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-4 rounded-2xl shadow-2xl z-50 border border-green-400 backdrop-blur-sm">
+        <div class="flex items-center space-x-3">
+            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="font-medium"><?php echo htmlspecialchars($success); ?></span>
+        </div>
+    </div>
+<?php endif; ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -52,6 +63,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -64,6 +76,33 @@
 
         .table-row:hover {
             background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(168, 85, 247, 0.05) 100%);
+        }
+
+        .user-photo {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-photo-mobile {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .default-avatar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -93,10 +132,10 @@
                                 <p class="text-indigo-100 mt-1">Gerencie sua comunidade de usuários</p>
                             </div>
                         </div>
-                        
+
                         <!-- Novo Usuário Button -->
-                        <a href="index.php?action=form" 
-                           class="bg-white text-indigo-600 px-8 py-4 rounded-2xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 hover:scale-105 action-button flex items-center space-x-3">
+                        <a href="index.php?action=form"
+                            class="bg-white text-indigo-600 px-8 py-4 rounded-2xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 hover:scale-105 action-button flex items-center space-x-3">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                             </svg>
@@ -120,7 +159,7 @@
                                                 <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                                                 </svg>
-                                                <span>Nome</span>
+                                                <span>Usuário</span>
                                             </div>
                                         </th>
                                         <th class="text-left p-6 font-semibold text-gray-700 uppercase tracking-wider text-sm">
@@ -140,6 +179,14 @@
                                                 <span>Estado</span>
                                             </div>
                                         </th>
+                                        <th class="text-left p-6 font-semibold text-gray-700 uppercase tracking-wider text-sm">
+                                            <div class="flex items-center space-x-2">
+                                                <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                                </svg>
+                                                <span>Interesses</span>
+                                            </div>
+                                        </th>
                                         <th class="text-right p-6 font-semibold text-gray-700 uppercase tracking-wider text-sm">Ações</th>
                                     </tr>
                                 </thead>
@@ -148,12 +195,22 @@
                                         <tr class="table-row transition-all duration-300" style="animation-delay: <?= $index * 0.1 ?>s">
                                             <td class="p-6">
                                                 <div class="flex items-center space-x-4">
-                                                    <div class="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold">
-                                                        <?= strtoupper(substr(htmlspecialchars($u['name']), 0, 1)) ?>
-                                                    </div>
+                                                    <?php if (!empty($u['photo'])): ?>
+                                                        <img src="<?= htmlspecialchars($u['photo']) ?>"
+                                                            alt="Foto de <?= htmlspecialchars($u['name']) ?>"
+                                                            class="user-photo"
+                                                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                                        <div class="user-photo default-avatar" style="display: none;">
+                                                            <?= strtoupper(substr(htmlspecialchars($u['name']), 0, 1)) ?>
+                                                        </div>
+                                                    <?php else: ?>
+                                                        <div class="user-photo default-avatar">
+                                                            <?= strtoupper(substr(htmlspecialchars($u['name']), 0, 1)) ?>
+                                                        </div>
+                                                    <?php endif; ?>
                                                     <div>
                                                         <div class="font-semibold text-gray-900"><?= htmlspecialchars($u['name']) ?></div>
-                                                        <div class="text-sm text-gray-500">Usuário ativo</div>
+                                                        <div class="text-sm text-gray-500">@<?= htmlspecialchars($u['username']) ?></div>
                                                     </div>
                                                 </div>
                                             </td>
@@ -165,18 +222,36 @@
                                                     <?= htmlspecialchars($u['state']) ?>
                                                 </span>
                                             </td>
+                                            <td class="p-6">
+                                                <div class="flex flex-wrap gap-1">
+                                                    <?php if (!empty($u['interests']) && is_array($u['interests'])): ?>
+                                                        <?php foreach (array_slice($u['interests'], 0, 3) as $interest): ?>
+                                                            <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gradient-to-r from-purple-100 to-pink-100 text-purple-800 border border-purple-200">
+                                                                <?= htmlspecialchars($interest) ?>
+                                                            </span>
+                                                        <?php endforeach; ?>
+                                                        <?php if (count($u['interests']) > 3): ?>
+                                                            <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-600">
+                                                                +<?= count($u['interests']) - 3 ?>
+                                                            </span>
+                                                        <?php endif; ?>
+                                                    <?php else: ?>
+                                                        <span class="text-gray-400 text-sm">Nenhum</span>
+                                                    <?php endif; ?>
+                                                </div>
+                                            </td>
                                             <td class="p-6 text-right">
                                                 <div class="flex justify-end space-x-3">
-                                                    <a href="?edit=<?= $u['id'] ?>" 
-                                                       class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-xl font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 action-button flex items-center space-x-2">
+                                                    <a href="?edit=<?= $u['id'] ?>"
+                                                        class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-xl font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 action-button flex items-center space-x-2">
                                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                                         </svg>
                                                         <span>Editar</span>
                                                     </a>
-                                                    <a href="?delete=<?= $u['id'] ?>" 
-                                                       onclick="return confirm('Deseja excluir este usuário?')"
-                                                       class="bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-2 rounded-xl font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 action-button flex items-center space-x-2">
+                                                    <a href="?delete=<?= $u['id'] ?>"
+                                                        onclick="return confirm('Deseja excluir este usuário?')"
+                                                        class="bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-2 rounded-xl font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 action-button flex items-center space-x-2">
                                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                                         </svg>
@@ -195,18 +270,27 @@
                     <div class="lg:hidden p-6 space-y-4">
                         <?php foreach ($users as $index => $u): ?>
                             <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/30 card-hover transition-all duration-300" style="animation-delay: <?= $index * 0.1 ?>s">
-                                <div class="flex items-start justify-between mb-4">
-                                    <div class="flex items-center space-x-4">
-                                        <div class="w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold text-lg">
+                                <div class="flex items-start space-x-4 mb-4">
+                                    <?php if (!empty($u['photo'])): ?>
+                                        <img src="<?= htmlspecialchars($u['photo']) ?>"
+                                            alt="Foto de <?= htmlspecialchars($u['name']) ?>"
+                                            class="user-photo-mobile flex-shrink-0"
+                                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                        <div class="user-photo-mobile default-avatar flex-shrink-0" style="display: none;">
                                             <?= strtoupper(substr(htmlspecialchars($u['name']), 0, 1)) ?>
                                         </div>
-                                        <div>
-                                            <h3 class="font-semibold text-gray-900 text-lg"><?= htmlspecialchars($u['name']) ?></h3>
-                                            <p class="text-gray-600"><?= htmlspecialchars($u['email']) ?></p>
+                                    <?php else: ?>
+                                        <div class="user-photo-mobile default-avatar flex-shrink-0">
+                                            <?= strtoupper(substr(htmlspecialchars($u['name']), 0, 1)) ?>
                                         </div>
+                                    <?php endif; ?>
+                                    <div class="flex-1 min-w-0">
+                                        <h3 class="font-semibold text-gray-900 text-lg"><?= htmlspecialchars($u['name']) ?></h3>
+                                        <p class="text-gray-600">@<?= htmlspecialchars($u['username']) ?></p>
+                                        <p class="text-gray-600"><?= htmlspecialchars($u['email']) ?></p>
                                     </div>
                                 </div>
-                                
+
                                 <div class="mb-4">
                                     <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gradient-to-r from-blue-100 to-indigo-100 text-indigo-800 border border-indigo-200">
                                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -216,9 +300,22 @@
                                     </span>
                                 </div>
 
+                                <?php if (!empty($u['interests']) && is_array($u['interests'])): ?>
+                                    <div class="mb-4">
+                                        <p class="text-sm font-medium text-gray-700 mb-2">Interesses:</p>
+                                        <div class="flex flex-wrap gap-2">
+                                            <?php foreach ($u['interests'] as $interest): ?>
+                                                <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gradient-to-r from-purple-100 to-pink-100 text-purple-800 border border-purple-200">
+                                                    <?= htmlspecialchars($interest) ?>
+                                                </span>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+
                                 <div class="flex space-x-3">
-                                    <a href="?edit=<?= $u['id'] ?>" 
-                                       class="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-3 rounded-xl font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 action-button text-center">
+                                    <a href="?edit=<?= $u['id'] ?>"
+                                        class="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-3 rounded-xl font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 action-button text-center">
                                         <div class="flex items-center justify-center space-x-2">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
@@ -226,9 +323,9 @@
                                             <span>Editar</span>
                                         </div>
                                     </a>
-                                    <a href="?delete=<?= $u['id'] ?>" 
-                                       onclick="return confirm('Deseja excluir este usuário?')"
-                                       class="flex-1 bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-3 rounded-xl font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 action-button text-center">
+                                    <a href="?delete=<?= $u['id'] ?>"
+                                        onclick="return confirm('Deseja excluir este usuário?')"
+                                        class="flex-1 bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-3 rounded-xl font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 action-button text-center">
                                         <div class="flex items-center justify-center space-x-2">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
@@ -251,8 +348,8 @@
                         </div>
                         <h3 class="text-2xl font-bold text-gray-700 mb-4">Nenhum usuário cadastrado</h3>
                         <p class="text-gray-600 mb-8 max-w-md mx-auto">Comece criando seu primeiro usuário para gerenciar sua comunidade de forma eficiente.</p>
-                        <a href="index.php?action=form" 
-                           class="inline-flex items-center space-x-3 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white px-8 py-4 rounded-2xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 hover:scale-105">
+                        <a href="index.php?action=form"
+                            class="inline-flex items-center space-x-3 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white px-8 py-4 rounded-2xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 hover:scale-105">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                             </svg>
@@ -290,6 +387,45 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Auto-hide notificações após 5 segundos
+        setTimeout(() => {
+            const notifications = document.querySelectorAll('.fixed.top-4.right-4');
+            notifications.forEach(notification => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => notification.remove(), 300);
+            });
+        }, 5000);
+
+        // Smooth scroll para ações
+        document.querySelectorAll('a[href^="?"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                if (this.getAttribute('href').includes('delete')) {
+                    return; // Deixa o confirm dialog funcionar normalmente
+                }
+
+                // Adiciona uma pequena animação de loading para outras ações
+                const button = this;
+                const originalText = button.innerHTML;
+
+                if (!button.classList.contains('loading')) {
+                    button.classList.add('loading');
+                    button.style.opacity = '0.7';
+                    button.style.pointerEvents = 'none';
+
+                    // Restaura após um tempo (caso a navegação falhe)
+                    setTimeout(() => {
+                        button.classList.remove('loading');
+                        button.style.opacity = '';
+                        button.style.pointerEvents = '';
+                        button.innerHTML = originalText;
+                    }, 3000);
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

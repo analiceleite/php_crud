@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     exit;
 }
 
-// LISTA
+// LIST
 $formData = $_SESSION['form_data'] ?? [];
 $error = $_SESSION['error'] ?? '';
 $editUser = $_SESSION['edit_user'] ?? null;
