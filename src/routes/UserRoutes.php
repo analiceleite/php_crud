@@ -1,15 +1,15 @@
 <?php
-session_start();
 
 require_once __DIR__ . '/../controllers/UserController.php';
 define('BASE_PATH', dirname(__DIR__, 2));
+
 
 $controller = new UserController();
 
 // DELETE
 if (isset($_GET['delete'])) {
     $controller->destroy((int)$_GET['delete']);
-    header("Location: /formulario/public/index.php");
+    header("Location: /formulario/src/views/home.php");
     exit;
 }
 
@@ -17,7 +17,7 @@ if (isset($_GET['delete'])) {
 if (isset($_GET['edit'])) {
     $editUser = $controller->find((int)$_GET['edit']);
     $_SESSION['edit_user'] = $editUser;
-    header("Location: /formulario/public/index.php?action=form");
+    header("Location: /formulario/src/views/home.php?action=form");
     exit;
 }
 
@@ -29,7 +29,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'form') {
 
     unset($_SESSION['form_data'], $_SESSION['error'], $_SESSION['edit_user']);
 
-    include_once BASE_PATH . '/views/form.php';
+    include_once BASE_PATH . '/src/views/form.php';
     exit;
 }
 
@@ -40,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     } else {
         $controller->store($_POST);
     }
-    header("Location: /formulario/public/index.php");
+    header("Location: /src/views/form.php");
     exit;
 }
 
@@ -52,4 +52,4 @@ $editUser = $_SESSION['edit_user'] ?? null;
 unset($_SESSION['form_data'], $_SESSION['error'], $_SESSION['edit_user']);
 
 $users = $controller->index();
-include_once BASE_PATH . '/views/list.php';
+include_once BASE_PATH . '/src/views/list.php';

@@ -134,7 +134,7 @@
                         </div>
 
                         <!-- Novo Usuário Button -->
-                        <a href="index.php?action=form"
+                        <a href="home.php?action=form"
                             class="bg-white text-indigo-600 px-8 py-4 rounded-2xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 hover:scale-105 action-button flex items-center space-x-3">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
@@ -196,7 +196,7 @@
                                             <td class="p-6">
                                                 <div class="flex items-center space-x-4">
                                                     <?php if (!empty($u['photo'])): ?>
-                                                        <img src="<?= htmlspecialchars($u['photo']) ?>"
+                                                        <img src="/formulario/public/<?php echo htmlspecialchars($u['photo']); ?>"
                                                             alt="Foto de <?= htmlspecialchars($u['name']) ?>"
                                                             class="user-photo"
                                                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
@@ -348,7 +348,7 @@
                         </div>
                         <h3 class="text-2xl font-bold text-gray-700 mb-4">Nenhum usuário cadastrado</h3>
                         <p class="text-gray-600 mb-8 max-w-md mx-auto">Comece criando seu primeiro usuário para gerenciar sua comunidade de forma eficiente.</p>
-                        <a href="index.php?action=form"
+                        <a href="home.php?action=form"
                             class="inline-flex items-center space-x-3 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white px-8 py-4 rounded-2xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 hover:scale-105">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>

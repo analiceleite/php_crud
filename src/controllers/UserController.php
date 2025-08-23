@@ -6,9 +6,8 @@ class UserController
 {
     private function handlePhotoUpload($uploadDir = null)
     {
-        if ($uploadDir === null) {
-            $uploadDir = __DIR__ . '/../../public/uploads/photos/';
-        }
+
+        $uploadDir = __DIR__ . '/../../public/uploads/photos/';
 
         if (!file_exists($uploadDir)) {
             mkdir($uploadDir, 0755, true);
@@ -56,7 +55,7 @@ class UserController
         if (str_word_count($data['name']) < 2) {
             $_SESSION['error'] = "Por favor, preencha o nome completo (nome e sobrenome).";
             $_SESSION['form_data'] = $data;
-            header("Location: index.php");
+            header("Location: home.php");
             exit;
         }
 
@@ -86,7 +85,7 @@ class UserController
         // Handle photo upload
         $photoResult = $this->handlePhotoUpload();
         if ($photoResult === false) {
-            header("Location: index.php");
+            header("Location: home.php");
             exit;
         }
 
@@ -161,7 +160,7 @@ class UserController
         $currentUser = $this->find($id);
         if (!$currentUser) {
             $_SESSION['error'] = "Usuário não encontrado.";
-            header("Location: index.php");
+            header("Location: home.php");
             exit;
         }
 
@@ -170,7 +169,7 @@ class UserController
 
         if ($photoResult === false) {
             // Erro de upload, já tratou sessão dentro da função
-            header("Location: index.php");
+            header("Location: home.php");
             exit;
         }
 
@@ -208,7 +207,7 @@ class UserController
         $conn->close();
 
         $_SESSION['success'] = "Usuário atualizado com sucesso!";
-        header("Location: index.php");
+        header("Location: home.php");
         exit;
     }
 
@@ -228,7 +227,7 @@ class UserController
         $conn->close();
 
         $_SESSION['success'] = "Usuário excluído com sucesso!";
-        header("Location: index.php");
+        header("Location: home.php");
         exit;
     }
 }

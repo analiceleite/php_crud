@@ -164,7 +164,7 @@ unset($_SESSION['greeting'], $_SESSION['is_minor'], $_SESSION['age']);
                 </div>
 
                 <div class="fade-in-delay space-y-4">
-                    <a href="index.php" 
+                    <a href="/formulario/src/views/home.php" 
                        class="inline-flex items-center space-x-3 bg-white text-gray-800 px-8 py-4 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 hover:scale-105 group">
                         <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>

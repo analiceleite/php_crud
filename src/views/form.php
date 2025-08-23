@@ -1,3 +1,7 @@
+<?php
+require_once __DIR__ . '/../middlewares/AuthMiddleware.php';
+?>
+
 <?php if (!empty($error)): ?>
     <div class="fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50">
         <?php echo htmlspecialchars($error); ?>
@@ -93,7 +97,7 @@
             <!-- Header -->
             <div class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 p-8 text-center">
                 <div class="text-left">
-                    <a href="index.php"
+                    <a href="/formulario/src/views/home.php"
                         class="inline-flex items-center space-x-2 bg-white text-indigo-600 px-8 py-4 rounded-2xl font-semibold shadow hover:shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:scale-105">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
@@ -111,7 +115,7 @@
                 <p class="text-indigo-100"><?= isset($editUser) ? 'Utilize esse espaço para editar os dados do usuário, é importante preencher todos os campos.' : 'Junte-se a nossa comunidade hoje mesmo!' ?></p>
             </div>
 
-            <form action="/formulario/public/index.php" method="POST" enctype="multipart/form-data" class="p-8 space-y-8">
+            <form action="/formulario/src/views/home.php" method="POST" enctype="multipart/form-data" class="p-8 space-y-8">
                 <?php if (!empty($editUser)): ?>
                     <input type="hidden" name="id" value="<?= htmlspecialchars($editUser['id']) ?>">
                 <?php endif; ?>
@@ -199,7 +203,7 @@
                             <?php if (!empty($editUser['photo'])): ?>
                                 <div class="mb-4 text-center">
                                     <div class="photo-container inline-block">
-                                        <img src="<?= htmlspecialchars($editUser['photo']) ?>"
+                                        <img src="/formulario/public/<?= htmlspecialchars($editUser['photo']) ?>"
                                             alt="Foto atual" class="photo-preview">
                                         <div class="photo-overlay">
                                             <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
