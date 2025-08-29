@@ -117,7 +117,7 @@ require_once __DIR__ . '/../middlewares/AuthMiddleware.php';
 
             <form action="/formulario/src/views/home.php" method="POST" enctype="multipart/form-data" class="p-8 space-y-8">
                 <?php if (!empty($editUser)): ?>
-                    <input type="hidden" name="id" value="<?= htmlspecialchars($editUser['id']) ?>">
+                    <input type="hidden" name="id" value="<?= htmlspecialchars($editUser['user_id']) ?>">
                 <?php endif; ?>
                 <!-- Informações Pessoais -->
                 <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/30">

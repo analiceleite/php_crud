@@ -124,7 +124,7 @@ class UserController
     public function index()
     {
         $conn = connect_database();
-        $result = $conn->query("SELECT * FROM users ORDER BY id DESC");
+        $result = $conn->query("SELECT * FROM users ORDER BY user_id DESC");
 
         $users = [];
         while ($row = $result->fetch_assoc()) {
@@ -139,7 +139,7 @@ class UserController
     public function find($id)
     {
         $conn = connect_database();
-        $stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
+        $stmt = $conn->prepare("SELECT * FROM users WHERE user_id = ?");
         $stmt->bind_param("i", $id);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -184,7 +184,7 @@ class UserController
         $user = new User($data);
         $conn = connect_database();
 
-        $stmt = $conn->prepare("UPDATE users SET name=?, email=?, birth_date=?, address=?, state=?, gender=?, interests=?, username=?, password=?, photo=? WHERE id=?");
+        $stmt = $conn->prepare("UPDATE users SET name=?, email=?, birth_date=?, address=?, state=?, gender=?, interests=?, username=?, password=?, photo=? WHERE user_id=?");
 
         $stmt->bind_param(
             "ssssssssssi",
@@ -220,7 +220,7 @@ class UserController
         }
 
         $conn = connect_database();
-        $stmt = $conn->prepare("DELETE FROM users WHERE id = ?");
+        $stmt = $conn->prepare("DELETE FROM users WHERE user_id = ?");
         $stmt->bind_param("i", $id);
         $stmt->execute();
         $stmt->close();
