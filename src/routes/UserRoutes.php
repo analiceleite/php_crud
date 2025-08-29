@@ -27,11 +27,17 @@ if (isset($_GET['action']) && $_GET['action'] === 'form') {
     $error = $_SESSION['error'] ?? '';
     $editUser = $_SESSION['edit_user'] ?? null;
 
+    // Garantir que 'interests' seja sempre um array
+    if ($editUser && !is_array($editUser['interests'])) {
+        $editUser['interests'] = [];
+    }
+
     unset($_SESSION['form_data'], $_SESSION['error'], $_SESSION['edit_user']);
 
     include_once BASE_PATH . '/src/views/form.php';
     exit;
 }
+
 
 // POST (CREATE or UPDATE)
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
