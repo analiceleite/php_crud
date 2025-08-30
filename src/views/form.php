@@ -2,6 +2,15 @@
 require_once __DIR__ . '/../middlewares/AuthMiddleware.php';
 ?>
 
+
+<?php
+require_once __DIR__ . '/../controllers/InterestController.php';
+
+$interestController = new InterestController();
+$interestsFromDB = $interestController->index();
+?>
+
+
 <?php if (!empty($error)): ?>
     <div class="fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50">
         <?php echo htmlspecialchars($error); ?>
@@ -246,22 +255,55 @@ require_once __DIR__ . '/../middlewares/AuthMiddleware.php';
                         <h2 class="text-xl font-semibold text-gray-800">Preferências</h2>
                     </div>
 
+
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-4">Categorias de interesse</label>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            <?php
-                            $interests = ['Moda', 'Tecnologia', 'Esportes', 'Música'];
-                            $userInterests = isset($editUser) ? $editUser['interests'] : (isset($_SESSION['form_data']['interests']) ? $_SESSION['form_data']['interests'] : []);
-                            foreach ($interests as $interest):
-                            ?>
-                                <label class="flex items-center space-x-3 p-3 rounded-xl border-2 border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 transition-all duration-300 cursor-pointer group">
-                                    <input type="checkbox" name="interests[]" value="<?= $interest ?>"
-                                        <?= in_array($interest, $userInterests) ? 'checked' : '' ?>
-                                        class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" />
-                                    <span class="text-gray-700 group-hover:text-indigo-600 transition-colors font-medium"><?= $interest ?></span>
-                                </label>
-                            <?php endforeach; ?>
-                        </div>
+                        <?php if (empty($interestsFromDB)): ?>
+                            <div class="text-center py-8 bg-gray-50 rounded-xl border-2 border-dashed border-gray-300">
+                                <svg class="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                </svg>
+                                <p class="text-gray-500 mb-2">Nenhum interesse disponível</p>
+                                <a href="interests.php" class="text-indigo-600 hover:text-indigo-800 font-medium">
+                                    Gerenciar interesses
+                                </a>
+                            </div>
+                        <?php else: ?>
+                            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                                <?php
+                                // Obter interesses do usuário (se estiver editando)
+                                $userInterests = [];
+                                if (isset($editUser) && !empty($editUser['interests'])) {
+                                    $userInterests = (is_array($editUser['interests']) ? $editUser['interests'] : json_decode($editUser['interests'], true)) ?: [];
+                                } elseif (isset($_SESSION['form_data']['interests'])) {
+                                    $userInterests = $_SESSION['form_data']['interests'];
+                                }
+
+                                foreach ($interestsFromDB as $interest):
+                                ?>
+                                    <label class="flex items-center space-x-3 p-3 rounded-xl border-2 border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 transition-all duration-300 cursor-pointer group">
+                                        <input type="checkbox"
+                                            name="interests[]"
+                                            value="<?= $interest['interest_id'] ?>"
+                                            <?= in_array($interest['interest_id'], $userInterests) ? 'checked' : '' ?>
+                                            class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" />
+                                        <span class="text-gray-700 group-hover:text-indigo-600 transition-colors font-medium">
+                                            <?= htmlspecialchars($interest['name']) ?>
+                                        </span>
+                                        <span class="text-xs text-gray-500 ml-auto">
+                                            (<?= $interest['user_count'] ?>)
+                                        </span>
+                                    </label>
+                                <?php endforeach; ?>
+                            </div>
+
+                            <!-- Link para gerenciar interesses -->
+                            <div class="mt-4 text-center">
+                                <a href="interests.php" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium">
+                                    ✨ Gerenciar interesses disponíveis
+                                </a>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
 

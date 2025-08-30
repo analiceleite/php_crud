@@ -117,28 +117,7 @@ class UserController
 
         // Relacionar interesses
         if (!empty($user->interests) && is_array($user->interests)) {
-            foreach ($user->interests as $interestName) {
-
-                // 1. Verifica se o interesse já existe
-                $stmtCheck = $conn->prepare("SELECT interest_id FROM interest WHERE name = ? LIMIT 1");
-                $stmtCheck->bind_param("s", $interestName);
-                $stmtCheck->execute();
-                $result = $stmtCheck->get_result();
-                $interest = $result->fetch_assoc();
-                $stmtCheck->close();
-
-                if ($interest) {
-                    $interestId = $interest['id'];
-                } else {
-                    // 2. Se não existe, insere na tabela interest
-                    $stmtInsertInterest = $conn->prepare("INSERT INTO interest (name) VALUES (?)");
-                    $stmtInsertInterest->bind_param("s", $interestName);
-                    $stmtInsertInterest->execute();
-                    $interestId = $conn->insert_id;
-                    $stmtInsertInterest->close();
-                }
-
-                // 3. Insere na tabela pessoa_interesse
+            foreach ($user->interests as $interestId) {
                 $stmtLink = $conn->prepare("INSERT INTO user_interest (user_id, interest_id) VALUES (?, ?)");
                 $stmtLink->bind_param("ii", $userId, $interestId);
                 $stmtLink->execute();
@@ -162,8 +141,9 @@ class UserController
         while ($row = $result->fetch_assoc()) {
             $userId = $row['user_id'];
 
+            // Buscar interesses do usuário
             $stmt = $conn->prepare("
-            SELECT i.name
+            SELECT i.interest_id, i.name
             FROM interest i
             INNER JOIN user_interest ui ON i.interest_id = ui.interest_id
             WHERE ui.user_id = ?
@@ -173,12 +153,15 @@ class UserController
             $res = $stmt->get_result();
 
             $interests = [];
+            $interestIds = [];
             while ($interest = $res->fetch_assoc()) {
                 $interests[] = $interest['name'];
+                $interestIds[] = $interest['interest_id'];
             }
             $stmt->close();
 
-            $row['interests'] = $interests;
+            $row['interests'] = $interests; // Para exibição
+            $row['interest_ids'] = $interestIds; // Para edição
             $users[] = $row;
         }
 
@@ -195,12 +178,32 @@ class UserController
         $result = $stmt->get_result();
         $user = $result->fetch_assoc();
         $stmt->close();
-        $conn->close();
 
         if ($user) {
-            $user['interests'] = json_decode($user['interests'], true);
+            // Buscar interesses do usuário
+            $stmtInterests = $conn->prepare("
+            SELECT i.interest_id, i.name
+            FROM interest i
+            INNER JOIN user_interest ui ON i.interest_id = ui.interest_id
+            WHERE ui.user_id = ?
+        ");
+            $stmtInterests->bind_param("i", $id);
+            $stmtInterests->execute();
+            $resInterests = $stmtInterests->get_result();
+
+            $interests = [];
+            $interestIds = [];
+            while ($interest = $resInterests->fetch_assoc()) {
+                $interests[] = $interest['name'];
+                $interestIds[] = $interest['interest_id'];
+            }
+            $stmtInterests->close();
+
+            $user['interests'] = $interestIds; // IDs para o formulário
+            $user['interest_names'] = $interests; // Nomes para exibição
         }
 
+        $conn->close();
         return $user;
     }
 

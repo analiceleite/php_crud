@@ -183,7 +183,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <!-- Footer -->
         <div class="text-center mt-6">
-            <p class="text-purple-300 text-sm">© 2024 Sistema. Todos os direitos reservados.</p>
+            <p class="text-purple-300 text-sm">© 2025 - Analice Sistema. Todos os direitos reservados.</p>
         </div>
 
     </div>
